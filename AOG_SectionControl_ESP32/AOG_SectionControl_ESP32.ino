@@ -1,4 +1,3 @@
-
 // Section Control code for AgOpenGPS V5 or later for ESP32
 
 // by MTZ8302 see GitHub https://github.com/mtz8302 and Youtube Ma Ha MTZ8302 https://www.youtube.com/channel/UCv44DlUXQJKbQjzaOUssVgw
@@ -14,101 +13,102 @@
 byte vers_nr = 47;
 char VersionTXT[150] = " - 25. Feb 2023 by MTZ8302<br>AgIO Heartbeat, AsyncUDP for WiFi, multiple WiFi networks, Ethernet support, WiFi Over The Air firmware update";
 
-
 struct set {
-	//User config: ***********************************************************************************
+  //User config: ***********************************************************************************
 
-	uint8_t DataTransVia = 7;		//transfer data via 0 = USB / 7 = WiFi / 10 = Ethernet UDP
-	uint8_t aogVersion = 20;		// not used at the moment
-	uint8_t AgIOHeartbeat_answer = 0;//0: don't send (default)
-	uint8_t LEDWiFi_PIN = 5;		// WiFi Status LED 255 = off
-	uint8_t LEDWiFi_ON_Level = 1;   // 1 = HIGH = LED on high, 0 = LOW = LED on low
+  uint8_t DataTransVia = 7;   //transfer data via 0 = USB / 7 = WiFi / 10 = Ethernet UDP
+  uint8_t aogVersion = 20;    // not used at the moment
+  uint8_t AgIOHeartbeat_answer = 0;//0: don't send (default)
+  uint8_t LEDWiFi_PIN = 2;   // WiFi Status LED 255 = off
+  uint8_t LEDWiFi_ON_Level = 1;   // 1 = HIGH = LED on high, 0 = LOW = LED on low
 
-	//WiFi---------------------------------------------------------------------------------------------
-	//tractors WiFi or mobile hotspots. Connections are checked in this order
-	char ssid1[24] = "GPS_unit_ESP_M8T";	// WiFi network Client name
-	char password1[24] = "";                // WiFi network password//Accesspoint name and password
-	char ssid2[24] = "Fendt_209V";			// WiFi network Client name
-	char password2[24] = "";                // WiFi network password//Accesspoint name and password
-	char ssid3[24] = "";					// WiFi network Client name
-	char password3[24] = "";                // WiFi network password//Accesspoint name and password
-	char ssid4[24] = "";					// WiFi network Client name
-	char password4[24] = "";                // WiFi network password//Accesspoint name and password
-	char ssid5[24] = "";					// WiFi network Client name
-	char password5[24] = "";                // WiFi network password//Accesspoint name and password
+  //WiFi---------------------------------------------------------------------------------------------
+  //tractors WiFi or mobile hotspots. Connections are checked in this order
+  char ssid1[24] = "AP1";  // WiFi network Client name John Deere 6800 RUT
+  char password1[24] = "---";   // WiFi network password//Accesspoint name and password ;
+  char ssid2[24] = "AP2";     // WiFi test network OL110
+  char password2[24] = "---";                // WiFi network password//Accesspoint name and password
+  char ssid3[24] = "AP3";    // WiFi network 6R
+  char password3[24] = "---";                // WiFi network password//Accesspoint name and password
+  char ssid4[24] = "";          // WiFi network Client name
+  char password4[24] = "";                // WiFi network password//Accesspoint name and password
+  char ssid5[24] = "";          // WiFi network Client name
+  char password5[24] = "";                // WiFi network password//Accesspoint name and password
 
-	char ssid_ap[24] = "SectionControlNet"; // name of Access point, if no WiFi found, no password!!
-	uint8_t timeoutRouter = 100;//s         // time (s) to search for existing WiFi, than starting Accesspoint 
-	byte timeoutWebIO = 10;//min  		    // time (min) afterwards webinterface is switched off	
+  char ssid_ap[24] = "SC_ESP32"; // name of Access point, if no WiFi found, no password!!
+  uint8_t timeoutRouter = 90;//s         // time (s) to search for existing WiFi, than starting Accesspoint
+  byte timeoutWebIO = 10;//min          // time (min) afterwards webinterface is switched off
 
-	//WiFi
-	byte WiFi_myip[4] = { 192, 168, 5, 71 };    // Roofcontrol module 
-	byte WiFi_gwip[4] = { 192, 168, 5, 1 };     // Gateway IP only used if Accesspoint created
-	byte WiFi_ipDest_ending = 255;				//ending of IP address to send UDP data to
-	byte mask[4] = { 255, 255, 255, 0 };
-	byte myDNS[4] = { 8, 8, 8, 8 };				//optional
+  //WiFi
+  byte WiFi_myip[4] = { 192, 168, 5, 50 };    // Roofcontrol module
+  byte WiFi_gwip[4] = { 192, 168, 5, 1 };     // Gateway IP only used if Accesspoint created
+  byte WiFi_ipDest_ending = 255;        //ending of IP address to send UDP data to
+  byte mask[4] = { 255, 255, 255, 0 };
+  byte myDNS[4] = { 192, 168, 100, 1 };       //optional
 
-	//Ethernet
-	byte Eth_myip[4] = { 192, 168, 5, 72 };     // Roofcontrol module 
-	byte Eth_ipDest_ending = 255;				// ending of IP address to send UDP data to
-	byte Eth_mac[6] = { 0x90,0xA2,0xDA,0x10,0xB3,0x1B };
-	bool Eth_static_IP = false;					// false = use DHPC and set last number to 80 (x.x.x.80) / true = use IP as set above
+  //Ethernet
+  byte Eth_myip[4] = { 192, 168, 101, 72 };     // Roofcontrol module
+  byte Eth_ipDest_ending = 255;       // ending of IP address to send UDP data to
+  byte Eth_mac[6] = { 0x90, 0xA2, 0xDA, 0x10, 0xB3, 0x1B };
+  bool Eth_static_IP = false;         // false = use DHPC and set last number to 80 (x.x.x.80) / true = use IP as set above
 
-	uint16_t PortSCToAOG = 5555;			// this is port of this module: Autosteer = 5577 IMU = 5566 Section Control = 5555 GPS = 5544
-	uint16_t PortFromAOG = 8888;            // port to listen for AOG
-	uint16_t PortDestination = 9999;        // Port of AOG that listens
-	uint16_t BaudRate = 38400;              // Baudrate = speed of serial port or USB or Bluetooth. AOG uses 38400 for UART
+  uint16_t PortSCToAOG = 5555;      // this is port of this module: Autosteer = 5577 IMU = 5566 Section Control = 5555 GPS = 5544
+  uint16_t PortFromAOG = 8888;            // port to listen for AOG
+  uint16_t PortDestination = 9999;        // Port of AOG that listens
+  uint16_t BaudRate = 38400;              // Baudrate = speed of serial port or USB or Bluetooth. AOG uses 38400 for UART
 
-//the following lines should be configed by the user to fit the programm to the sprayer/ESP32
-//GPIOs of the ESP32 (current setting is for the layout shown as example WIKI)
+  //the following lines should be configed by the user to fit the programm to the sprayer/ESP32
+  //GPIOs of the ESP32 (current setting is for the layout shown as example WIKI)
 
-	byte Eth_CS_PIN = 13;					// CS PIN with SPI Ethernet hardware  SPI config: MOSI 23 / MISO 19 / CLK18 / CS5
-	byte Eth_INT_PIN = 255;                 //interupt pin not used at the moment, but needed if async ethernet lib will be used
+  byte Eth_CS_PIN = 255;          // CS PIN with SPI Ethernet hardware  SPI config: MOSI 23 / MISO 19 / CLK18 / CS5
+  byte Eth_INT_PIN = 255;                 //interupt pin not used at the moment, but needed if async ethernet lib will be used
 
-// if only 1 flowrate is used, use left
-//Example1: motor valve is controled only by Switch not by AOG, no Flowmeter, : RateControl..Equiped = false; RateSW..Equiped = true; RateControlPWM = false;
-//Example2: PWM valve, with flowmeter all controled by AOG:   RateControl..Equiped = true; RateSW..Equiped = true; RateControlPWM = true;	
-	uint8_t RateControlLeftInst = 0;		// 1 if Rate control is there, else: 0
-	uint8_t RateSWLeftInst = 1;				// 1 if Rate control Pressure switch is there, else: 0
-	uint8_t RateSWLeft_PIN = 34;			// Rate +/- switch (ON)-0-(ON) toggle switch (GND)- 1.75V - (3,3V)
-	uint8_t RateControlPWM = 0;				// 1 if PWM valve, 0 if Motor drive for pressure change		
+  
+    // if only 1 flowrate is used, use left
+    //Example1: motor valve is controled only by Switch not by AOG, no Flowmeter, : RateControl..Equiped = false; RateSW..Equiped = true; RateControlPWM = false;
+    //Example2: PWM valve, with flowmeter all controled by AOG:   RateControl..Equiped = true; RateSW..Equiped = true; RateControlPWM = true;
+    uint8_t RateControlLeftInst = 0;    // 1 if Rate control is there, else: 0
+    uint8_t RateSWLeftInst = 0;       // 1 if Rate control Pressure switch is there, else: 0
+    uint8_t RateSWLeft_PIN = 0;     // Rate +/- switch (ON)-0-(ON) toggle switch (GND)- 1.75V - (3,3V)
+    uint8_t RateControlPWM = 0;       // 1 if PWM valve, 0 if Motor drive for pressure change
 
-	uint8_t	FlowDirLeft_PIN = 23;			// Rate-Control Valve/Motor Direktion
-	uint8_t	FlowPWMLeft_PIN = 22;			// Rate-Control Valve PWM/Motor ON/OFF
-	uint8_t	FlowEncALeft_PIN = 255;			// Flowmeter left/1
+    uint8_t FlowDirLeft_PIN = 255;      // Rate-Control Valve/Motor Direktion
+    uint8_t FlowPWMLeft_PIN = 255;      // Rate-Control Valve PWM/Motor ON/OFF
+    uint8_t FlowEncALeft_PIN = 255;     // Flowmeter left/1
 
-	uint8_t RateControlRightInst = 0;	    // 1 if Rate control is there, else: 0
-	uint8_t RateSWRightInst = 0;			// 1 if Rate control Pressure switch is there, else: 0	
-	uint8_t	RateSWRight_PIN = 255;			// Rate +/- switch
-	uint8_t	FlowDirRight_PIN = 255;			// 255  = unused Rate-Control Valve Direktion
-	uint8_t	FlowPWMRight_PIN = 255;			// 255  = unused Rate-Control Valve PWM
-	uint8_t	FlowEncARight_PIN = 255;		// Flowmeter right/2 
+    uint8_t RateControlRightInst = 0;     // 1 if Rate control is there, else: 0
+    uint8_t RateSWRightInst = 0;      // 1 if Rate control Pressure switch is there, else: 0
 
-	uint8_t SectNum = 9;					// number of sections
-	uint8_t SectRelaysInst = 1;				// relays for SC output are equiped (0=no output, only documentation)
-	uint8_t SectRelaysON = 1;				// relays spray on 1 or 0 (high or low)
-	uint8_t Relay_PIN[16] = { 15,2,255,4,16,17,18,19,21,255,255,255,255,255,255,255 };  //GPIOs of ESP32 OUT to sections of sprayer HIGH/3.3V = ON
-	uint8_t Relais_MainValve_PIN = 255;		// PIN for Main fluid valve 255 = unused
-	uint8_t SectSWInst = 1;					// 1 if section input switches are equiped, else: 0	
-	uint8_t SectSWAutoOrOn = 1;				// Section switches spray/auto on 1 = high = used with pullup, 0 = low = pulldown 
+    uint8_t RateSWRight_PIN = 255;      // Rate +/- switch
+    uint8_t FlowDirRight_PIN = 255;     // 255  = unused Rate-Control Valve Direktion
+    uint8_t FlowPWMRight_PIN = 255;     // 255  = unused Rate-Control Valve PWM
+    uint8_t FlowEncARight_PIN = 255;    // Flowmeter right/2
+  
 
-	uint8_t SectSW_PIN[16] = { 13,12,14,27,26,25,33,255,255,255,255,255,255,255,255,255 };//section switches to GPIOs of ESP32 GND = section off, open/+3.3V section auto/on
-	uint8_t	SectMainSWType = 1;				// 0 = not equiped 1 = (ON)-OFF-(ON) toggle switch or push buttons 2 = connected to hitch level sensor 3 = inverted hitch level sensor
-	uint16_t	HitchLevelVal = 2000;		// Value for hitch level: switch AOG section control to Auto if lower than... ESP:2000 nano 500
-	uint8_t	SectMainSW_PIN = 32;			// ESP32 to AOG Main auto toggle switch open=nothing/AOG button GND=OFF +3,3=AOG Auto on	OR connected to hitch level sensor	
-	uint8_t	SectAutoManSW_PIN = 39;			// Main Auto/Manual switch 39:!!no internal pullup!!
+  uint8_t SectNum = 8;          // number of sections
+  uint8_t SectRelaysInst = 1;       // relays for SC output are equiped (0=no output, only documentation)
+  uint8_t SectRelaysON = 1;         // relays spray on 1 or 0 (high or low)
+  uint8_t Relay_PIN[8] = { 16, 4, 13, 14, 27, 26, 25, 255  }; //GPIOs of ESP32 OUT to sections of sprayer HIGH/3.3V = ON
+  uint8_t Relais_MainValve_PIN = 255;   // PIN for Main fluid valve 255 = unused
+  uint8_t SectSWInst = 1;         // 1 if section input switches are equiped, else: 0
+  uint8_t SectSWAutoOrOn = 1;       // Section switches spray/auto on 1 = high = used with pullup, 0 = low = pulldown
+  uint8_t SectSW_PIN[8] = { 255,255,255,255,255,255,255,255 }; //section switches to GPIOs of ESP32 GND = section off, open/+3.3V section auto/on
+  uint8_t SectMainSWType = 0;       // 0 = not equiped 1 = (ON)-OFF-(ON) toggle switch or push buttons 2 = connected to hitch level sensor 3 = inverted hitch level sensor
+  uint16_t HitchLevelVal = 2000;    // Value for hitch level: switch AOG section control to Auto if lower than... ESP:2000 nano 500
+  uint8_t SectMainSW_PIN = 255;      // ESP32 to AOG Main auto toggle switch open=nothing/AOG button GND=OFF +3,3=AOG Auto on  OR connected to hitch level sensor
+  uint8_t SectAutoManSW_PIN = 39;     // Main Auto/Manual switch 39:!!no internal pullup!! Sensor_VN = GPIO39  ; wäre zum Umschalten zwischen Auto und manuell da; Platine definiert aber das Hauptventil; ich müsste im Loop den Wert abfragen und dann Automatik ausschalten
 
-	uint8_t DocOnly = 0;					// 0: use as section control, 1: Documentation only = AOG writes the state of the input switches
+  uint8_t DocOnly = 0;          // 0: use as section control, 1: Documentation only = AOG writes the state of the input switches
 
 
 
-	bool debugmode = false;
-	bool debugmodeRelay = false;
-	bool debugmodeSwitches = false;
-	bool debugmodeDataFromAOG = false;
-	bool debugmodeDataToAOG = false;
+  bool debugmode = false;
+  bool debugmodeRelay = false;
+  bool debugmodeSwitches = false;
+  bool debugmodeDataFromAOG = false;
+  bool debugmodeDataToAOG = false;
 
-	// END of user config ****************************************************************************
+  // END of user config ****************************************************************************
 }; set Set;
 
 

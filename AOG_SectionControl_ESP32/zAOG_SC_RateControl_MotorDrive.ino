@@ -1,5 +1,6 @@
 void motorDrive(void)
 {
+  /*
 	if (Set.RateControlLeftInst == 1) {
 		//if (pwmDrive > 0) bitSet(PORTB, 4);  //set the correct direction
 		//analogWrite(Set.FlowPWMLeft_PIN, pwmDrive);
@@ -27,7 +28,8 @@ void motorDrive(void)
 			if (!(RateManUpLeft || RateManDownLeft || RateManUpRight || RateManDownRight))
 				{ digitalWrite(Set.FlowDirRight_PIN, LOW); digitalWrite(Set.FlowPWMRight_PIN, LOW); digitalWrite(Set.FlowDirLeft_PIN, LOW); digitalWrite(Set.FlowPWMLeft_PIN, LOW);
 				}
-			*/
+			
 		}
 	}
+ */
 }

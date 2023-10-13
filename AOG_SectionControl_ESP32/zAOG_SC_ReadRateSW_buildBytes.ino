@@ -1,5 +1,6 @@
 void RateSWRead()
 {
+  /*
 	SectSWcurrentTime = millis();
 	RateSWLeftVal = analogRead(Set.RateSWLeft_PIN);
 
@@ -59,7 +60,7 @@ void RateSWRead()
 			RateManDownLeft = false; RateManUpLeft = false;
 
 
-/*			rate control not processed in AOG
+			rate control not processed in AOG
 			
 			//hold signal for Delay Time to make AOG see it
 			if (SectSWcurrentTime > RateSWlastTimeLeft + SectSWDelayTime)
@@ -68,7 +69,8 @@ void RateSWRead()
 				bitClear(SectMainToAOG, 3);
 				bitClear(SectMainToAOG, 4);
 				bitClear(SectMainToAOG, 5);
-			}*/
+			}
 		}
+   */
 	// not send imideately to bundle long press or a cupple of presses to the Bit[2+3], so SectSWpressed not used
 } //end of RateSWRead
